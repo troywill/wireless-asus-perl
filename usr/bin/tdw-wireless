@@ -35,14 +35,6 @@ sub get_network_status {
     return $network_status;
 }
 
-sub set_essid {
-    my ( $wireless_device, $essid ) = @_;
-    my $command = "/usr/sbin/iwconfig ${WIRELESS_DEVICE} essid ${ESSID}";
-    print "=> $command\n";
-    system $command;
-    sleep 3;
-}
-
 sub down {
     system("/sbin/ip link set eth1 down");
     system("/sbin/ip link set ${WIRELESS_DEVICE} down");
@@ -57,4 +49,12 @@ sub up {
 #    system("/usr/sbin/dhcpcd ${WIRELESS_DEVICE}");
 #    system("/sbin/ip addr add ${MY_IP_ADDRESS}/24 broadcast 192.168.1.255 dev ${WIRELESS_DEVICE}");
 #    system("/sbin/ip route add default via ${GATEWAY_IP_ADDRESS} dev ${WIRELESS_DEVICE}");
+}
+
+sub set_essid {
+    my ( $wireless_device, $essid ) = @_;
+    my $command = "/usr/sbin/iwconfig ${WIRELESS_DEVICE} essid ${ESSID}";
+    print "=> $command\n";
+    system $command;
+    sleep 3;
 }
