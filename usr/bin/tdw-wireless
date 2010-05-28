@@ -3,43 +3,27 @@ use warnings;
 use strict;
 # troydwill@gmail.com, June 2010
 
-my $WIRELESS_DEVICE='';
-if ( defined $ARGV[0] ) {
-    $WIRELESS_DEVICE=$ARGV[0];
-} else {
-    $WIRELESS_DEVICE='wlan0'
-}
+my $WIRELESS_DEVICE='wlan0';
 my $ESSID='JM';
 my $KEY='D21B5074EA';
 # $ESSID='nunu';
 # $KEY='644E4A6E39';
-my $MY_IP_ADDRESS='192.168.1.39';
-my $GATEWAY_IP_ADDRESS='192.168.1.1';
 
 my $network_status = &get_network_status($WIRELESS_DEVICE);
 
 while (1) {
     my $network_status = &get_network_status();
     if ( $network_status eq 'up' ) {
-	print ".";
-	sleep 1;
+	print "."; sleep 1;
     } else {
 	print "d";
-	&up;
-	sleep 1;
+	&up; sleep 1;
     }
 }
 
 sub get_network_status {
     chomp(my $network_status = `cat /sys/class/net/$WIRELESS_DEVICE/operstate`);
     return $network_status;
-}
-
-sub down {
-    system("/sbin/ip link set eth1 down");
-    system("/sbin/ip link set ${WIRELESS_DEVICE} down");
-    system("/sbin/ip route del default via ${GATEWAY_IP_ADDRESS} dev ${WIRELESS_DEVICE}");
-    system("/sbin/ip addr del ${MY_IP_ADDRESS}/24 broadcast 192.168.1.255 dev ${WIRELESS_DEVICE}");
 }
 
 sub up {
