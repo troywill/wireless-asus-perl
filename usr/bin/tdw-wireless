@@ -18,6 +18,18 @@ my $GATEWAY_IP_ADDRESS='192.168.1.1';
 
 my $network_status = &get_network_status($WIRELESS_DEVICE);
 
+while (1) {
+    my $network_status = &get_network_status();
+    if ( $network_status eq 'up' ) {
+	print ".";
+	sleep 1;
+    } else {
+	print "d";
+	&up;
+	sleep 1;
+    }
+}
+
 sub get_network_status {
     chomp(my $network_status = `cat /sys/class/net/$WIRELESS_DEVICE/operstate`);
     return $network_status;
@@ -29,18 +41,6 @@ sub set_essid {
     print "=> $command\n";
     system $command;
     sleep 3;
-}
-
-while (1) {
-    my $network_status = &get_network_status();
-    if ( $network_status eq 'up' ) {
-	print ".";
-	sleep 1;
-    } else {
-	print "d";
-	&up;
-	sleep 1;
-    }
 }
 
 sub down {
