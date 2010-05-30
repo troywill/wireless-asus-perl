@@ -29,15 +29,21 @@ sub get_network_status {
 sub up {
      system("/sbin/ip link set ${WIRELESS_DEVICE} up");
      &set_essid ( ${WIRELESS_DEVICE}, ${ESSID});
-     system("/usr/sbin/iwconfig ${WIRELESS_DEVICE} key ${KEY}");
-#    system("/usr/sbin/dhcpcd ${WIRELESS_DEVICE}");
-#    system("/sbin/ip addr add ${MY_IP_ADDRESS}/24 broadcast 192.168.1.255 dev ${WIRELESS_DEVICE}");
+     &set_key ( ${WIRELESS_DEVICE}, ${KEY});
 #    system("/sbin/ip route add default via ${GATEWAY_IP_ADDRESS} dev ${WIRELESS_DEVICE}");
 }
 
 sub set_essid {
     my ( $wireless_device, $essid ) = @_;
-    my $command = "/usr/sbin/iwconfig ${WIRELESS_DEVICE} essid ${ESSID}";
+    my $command = "/usr/sbin/iwconfig $wireless_device essid $essid";
+    print "=> $command\n";
+    system $command;
+    sleep 3;
+}
+
+sub set_key {
+    my ( $wireless_device, $key ) = @_;
+    my $command = "/usr/sbin/iwconfig $wireless_device key $key";
     print "=> $command\n";
     system $command;
     sleep 3;
