@@ -2,12 +2,12 @@
 use warnings;
 use strict;
 # troydwill@gmail.com, June 2010
-
 my $WIRELESS_DEVICE='wlan0';
 my $ESSID='JM';
 my $KEY='D21B5074EA';
 # $ESSID='nunu';
 # $KEY='644E4A6E39';
+my $SUDO = &get_sudo();
 
 my $network_status = &get_network_status($WIRELESS_DEVICE);
 
@@ -35,7 +35,7 @@ sub up {
 
 sub set_essid {
     my ( $wireless_device, $essid ) = @_;
-    my $command = "/usr/sbin/iwconfig $wireless_device essid $essid";
+    my $command = "$SUDO /usr/sbin/iwconfig $wireless_device essid $essid";
     print "=> $command\n";
     system $command;
     sleep 3;
@@ -43,8 +43,16 @@ sub set_essid {
 
 sub set_key {
     my ( $wireless_device, $key ) = @_;
-    my $command = "/usr/sbin/iwconfig $wireless_device key $key";
+    my $command = "$SUDO /usr/sbin/iwconfig $wireless_device key $key";
     print "=> $command\n";
     system $command;
     sleep 3;
+}
+
+sub get_sudo {
+    if ( $ENV{"USER"} ne 'root') {
+	return '/usr/bin/sudo';
+    }	else {
+	return '';
+    }
 }
