@@ -5,9 +5,11 @@ use strict;
 my $WIRELESS_DEVICE='wlan0';
 my $ESSID='JM';
 my $KEY='D21B5074EA';
-# $ESSID='nunu';
-# $KEY='644E4A6E39';
+$ESSID='nunu';
+$KEY='644E4A6E39';
 my $SUDO = &get_sudo();
+system "$SUDO /usr/sbin/dhcpcd $WIRELESS_DEVICE &";
+system "$SUDO /etc/rc.d/init.d/network stop";
 
 my $network_status = &get_network_status($WIRELESS_DEVICE);
 
