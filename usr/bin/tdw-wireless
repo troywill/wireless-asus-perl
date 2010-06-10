@@ -3,10 +3,12 @@ use warnings;
 use strict;
 # troydwill@gmail.com, June 2010
 my $WIRELESS_DEVICE='wlan0';
-my $ESSID='JM';
-my $KEY='D21B5074EA';
-$ESSID='nunu';
-$KEY='644E4A6E39';
+my $ESSID='nunu';
+my $KEY='644E4A6E39';
+if ( defined $ARGV[0] ) {
+    $ESSID='JM';
+    $KEY='D21B5074EA';
+}
 my $SUDO = &get_sudo();
 system "$SUDO /usr/sbin/dhcpcd $WIRELESS_DEVICE &";
 system "$SUDO /etc/rc.d/init.d/network stop";
