@@ -2,38 +2,48 @@
 use warnings;
 use strict;
 # troydwill@gmail.com, June 2010
+my $SUDO = &get_sudo();
 my $WIRELESS_DEVICE='wlan0';
 my $ESSID='nunu';
 my $KEY='644E4A6E39';
+my $CARRIER_CAT_COMMAND = "cat /sys/class/net/${WIRELESS_DEVICE}/carrier";
+my $OPERATING_STATE_COMMAND = "cat /sys/class/net/${WIRELESS_DEVICE}/operstate";
+my $LINK_UP_COMMAND = "$SUDO ip link set wlan0 up";
+my $DHCPCD_COMMAND = "$SUDO /usr/sbin/dhcpcd $WIRELESS_DEVICE";
+
+&run_command($CARRIER_CAT_COMMAND);
+&run_command($LINK_UP_COMMAND);
+
 if ( defined $ARGV[0] ) {
     $ESSID='JM';
     $KEY='D21B5074EA';
 }
-my $SUDO = &get_sudo();
-system "$SUDO /usr/sbin/dhcpcd $WIRELESS_DEVICE &";
-system "$SUDO /etc/rc.d/init.d/network stop";
+
+# system "$SUDO /etc/rc.d/init.d/network stop";
 
 my $network_status = &get_network_status($WIRELESS_DEVICE);
 
 while (1) {
     my $network_status = &get_network_status();
     if ( $network_status eq 'up' ) {
-	print "."; sleep 1;
+	print "UP!"; exit;
     } else {
 	print "d";
-	&up; sleep 1;
+	&up; sleep 2;
     }
 }
 
 sub get_network_status {
-    chomp(my $network_status = `cat /sys/class/net/$WIRELESS_DEVICE/operstate`);
+    chomp(my $network_status = `$OPERATING_STATE_COMMAND`);
+    print "DEBUG: $network_status";
     return $network_status;
 }
 
 sub up {
-     system("/sbin/ip link set ${WIRELESS_DEVICE} up");
-     &set_essid ( ${WIRELESS_DEVICE}, ${ESSID});
-     &set_key ( ${WIRELESS_DEVICE}, ${KEY});
+    &run_command($LINK_UP_COMMAND);
+    &set_essid ( ${WIRELESS_DEVICE}, ${ESSID});
+    &set_key ( ${WIRELESS_DEVICE}, ${KEY});
+    &run_command($DHCPCD_COMMAND);
 #    system("/sbin/ip route add default via ${GATEWAY_IP_ADDRESS} dev ${WIRELESS_DEVICE}");
 }
 
@@ -42,7 +52,6 @@ sub set_essid {
     my $command = "$SUDO /usr/sbin/iwconfig $wireless_device essid $essid";
     print "=> $command\n";
     system $command;
-    sleep 3;
 }
 
 sub set_key {
@@ -50,7 +59,6 @@ sub set_key {
     my $command = "$SUDO /usr/sbin/iwconfig $wireless_device key $key";
     print "=> $command\n";
     system $command;
-    sleep 3;
 }
 
 sub get_sudo {
@@ -59,4 +67,10 @@ sub get_sudo {
     }	else {
 	return '';
     }
+}
+
+sub run_command {
+    my $command = shift;
+    print "=> $command\n";
+    system $command;
 }
