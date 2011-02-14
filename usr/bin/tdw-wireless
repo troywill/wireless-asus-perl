@@ -2,6 +2,7 @@
 use warnings;
 use strict;
 # troydwill@gmail.com, June 2010
+my $DELAY=1;
 my $SUDO = &get_sudo();
 my $WIRELESS_DEVICE='wlan0';
 my $ESSID='nunu';
@@ -13,11 +14,7 @@ my $DHCPCD_COMMAND = "$SUDO /usr/sbin/dhcpcd $WIRELESS_DEVICE";
 
 while(chomp ( my $result = `$CARRIER_CAT_COMMAND` ) != 1) {
     &run_command($LINK_UP_COMMAND);
-    sleep 1;
 }
-
-&run_command($CARRIER_CAT_COMMAND);
-&run_command($LINK_UP_COMMAND);
 
 if ( defined $ARGV[0] ) {
     $ESSID='JM';
@@ -33,21 +30,20 @@ while (1) {
     if ( $network_status eq 'up' ) {
 	print "UP!"; exit;
     } else {
-	print "d";
 	&up; sleep 2;
     }
 }
 
 sub get_network_status {
     chomp(my $network_status = `$OPERATING_STATE_COMMAND`);
-    print "DEBUG: $network_status";
     return $network_status;
 }
 
 sub up {
-    &run_command($LINK_UP_COMMAND);
+#    &run_command($LINK_UP_COMMAND);
     &set_essid ( ${WIRELESS_DEVICE}, ${ESSID});
     &set_key ( ${WIRELESS_DEVICE}, ${KEY});
+    sleep $DELAY;
     &run_command($DHCPCD_COMMAND);
 #    system("/sbin/ip route add default via ${GATEWAY_IP_ADDRESS} dev ${WIRELESS_DEVICE}");
 }
