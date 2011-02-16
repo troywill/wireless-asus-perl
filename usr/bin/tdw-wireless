@@ -33,7 +33,7 @@ while (1) {
     if ( $network_status eq 'up' ) {
 	print "UP!"; exit;
     } else {
-	&up; sleep 2;
+	&up;
     }
 }
 
@@ -50,8 +50,13 @@ sub up {
     for (1..5) {
 	sleep $DELAY;
 	my $carrier = `$CARRIER_CAT_COMMAND`;
+	print "CARRIER = $carrier ...";
 	chomp $carrier;
-	last if $carrier == 1;
+	if ( $carrier == 1 ) {
+	    print "$DHCPCD_COMMAND in 1 second\n";
+	    sleep 1;
+	    last;
+	}
     }
     &run_command($DHCPCD_COMMAND);
 #    system("/sbin/ip route add default via ${GATEWAY_IP_ADDRESS} dev ${WIRELESS_DEVICE}");
