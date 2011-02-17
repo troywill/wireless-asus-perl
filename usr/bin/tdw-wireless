@@ -2,7 +2,7 @@
 use warnings;
 use strict;
 # troydwill@gmail.com, June 2010
-my $DELAY=1;
+my $DELAY=3;
 my $SUDO = &get_sudo();
 my $WIRELESS_DEVICE='wlan0';
 my $ESSID='nunu';
@@ -44,11 +44,8 @@ sub get_network_status {
 
 sub up {
     &run_command($LINK_UP_COMMAND);
-    &set_essid ( ${WIRELESS_DEVICE}, ${ESSID});
-    &set_key ( ${WIRELESS_DEVICE}, ${KEY});
     for (1..5) {
 	&set_essid ( ${WIRELESS_DEVICE}, ${ESSID});
-	sleep $DELAY;
 	&set_key ( ${WIRELESS_DEVICE}, ${KEY});
 	sleep $DELAY;
 	my $carrier = `$CARRIER_CAT_COMMAND`;
