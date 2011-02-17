@@ -47,7 +47,7 @@ sub up {
     for (1..5) {
 	&set_essid ( ${WIRELESS_DEVICE}, ${ESSID});
 	&set_key ( ${WIRELESS_DEVICE}, ${KEY});
-	sleep $DELAY;
+	do_sleep $DELAY;
 	my $carrier = `$CARRIER_CAT_COMMAND`;
 	print "CARRIER = $carrier ...";
 	chomp $carrier;
@@ -87,4 +87,10 @@ sub run_command {
     my $command = shift;
     print "=> $command\n";
     system $command;
+}
+
+sub do_sleep {
+    my $delay = shift;
+    print "$delay\n";
+    sleep $delay;
 }
