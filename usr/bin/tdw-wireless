@@ -2,7 +2,7 @@
 use warnings;
 use strict;
 # troydwill@gmail.com, June 2010
-my $DELAY=4;
+my $DELAY=1;
 my $SUDO = &get_sudo();
 my $WIRELESS_DEVICE='wlan0';
 my $ESSID='nunu';
@@ -45,15 +45,17 @@ sub get_network_status {
 sub up {
     &run_command($LINK_UP_COMMAND);
     &set_essid ( ${WIRELESS_DEVICE}, ${ESSID});
-    sleep 1;
     &set_key ( ${WIRELESS_DEVICE}, ${KEY});
     for (1..5) {
+	&set_essid ( ${WIRELESS_DEVICE}, ${ESSID});
+	sleep $DELAY;
+	&set_key ( ${WIRELESS_DEVICE}, ${KEY});
 	sleep $DELAY;
 	my $carrier = `$CARRIER_CAT_COMMAND`;
 	print "CARRIER = $carrier ...";
 	chomp $carrier;
 	if ( $carrier == 1 ) {
-	    print "$DHCPCD_COMMAND in 2 seconds\n";
+	    print "$DHCPCD_COMMAND in two seconds\n";
 	    sleep 2;
 	    last;
 	}
