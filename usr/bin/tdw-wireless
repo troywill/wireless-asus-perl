@@ -19,10 +19,10 @@ while(chomp ( my $result = `$CARRIER_CAT_COMMAND` ) != 1) {
     &run_command($LINK_UP_COMMAND);
 }
 
-if ( defined $ARGV[0] ) {
-    $ESSID='JM';
-    $KEY='D21B5074EA';
-}
+# if ( defined $ARGV[0] ) {
+#     $ESSID='JM';
+#     $KEY='D21B5074EA';
+# }
 
 # system "$SUDO /etc/rc.d/init.d/network stop";
 
