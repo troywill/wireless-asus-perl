@@ -28,7 +28,6 @@ while(chomp ( my $result = `$CARRIER_CAT_COMMAND` ) != 1) {
 
 my $network_status = &get_network_status($WIRELESS_DEVICE);
 
-my $network_status = &get_network_status();
 if ( $network_status eq 'up' ) {
     print "UP!"; exit;
 } else {
