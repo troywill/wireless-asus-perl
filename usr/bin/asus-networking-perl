@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 use warnings;
 use strict;
-# troydwill@gmail.com, June 2010
+# troydwill@gmail.com, May 2011
 my $DELAY=1;
 my $SUDO = &get_sudo();
 my $WIRELESS_DEVICE='wlan0';
