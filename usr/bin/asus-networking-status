@@ -22,6 +22,8 @@ my $GET_IP_ADDRESS_COMMAND = "$SUDO ip addr show dev $WIRELESS_DEVICE";
 
 &show_status();
 
+exit;
+
 sub show_status {
     print `date`;
     chomp( my $carrier_eth0 = `cat /sys/class/net/eth0/carrier 2>/dev/null` );
