@@ -28,8 +28,13 @@ sub show_status {
     print `date`;
     chomp( my $carrier_eth0 = `cat /sys/class/net/eth0/carrier 2>/dev/null` );
     chomp( my $carrier_wlan0 = `cat /sys/class/net/wlan0/carrier 2>/dev/null`);
-    print "eth0: ${carrier_eth0}\n";
-    print "wlan0: ${carrier_wlan0}\n";
+    # wlan0
+    if ( ($carrier_wlan0 eq "") ) {
+	print "wlan0: ${carrier_wlan0} carrier not defined\n";
+    }
+    if ( ($carrier_eth0 eq "") ) {
+	print "eth0: ${carrier_eth0} carrier not defined\n";
+    }
 }
 
 &run_command($GET_IP_ADDRESS_COMMAND);
